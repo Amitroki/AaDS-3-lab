@@ -17,8 +17,9 @@ namespace algorithm {
 			copy_count = other.copy_count;
 		}
 	};
-	void swap(int& a, int& b, stats& stats) {
-		int temp = a;
+	template<typename T>
+	void swap(T& a, T& b, stats& stats) {
+		T temp = a;
 		a = b;
 		b = temp;
 		stats.copy_count += 3;
@@ -37,8 +38,9 @@ namespace algorithm {
 		}
 		return sorting_results;
 	}
-	int partition(std::vector<int>& arr, int low, int high, stats& stats) {
-		int pivot = arr[high];
+	template<typename T>
+	int partition(std::vector<T>& arr, int low, int high, stats& stats) {
+		T pivot = arr[high];
 		int i = (low - 1);
 		for (int j = low; j <= high - 1; j++) {
 			if (arr[j] <= pivot) {
@@ -50,12 +52,13 @@ namespace algorithm {
 		swap(arr[i + 1], arr[high], stats);
 		return (i + 1);
 	}
-	stats quickSort(std::vector<int>& arr, int low, int high) {
+	template<typename T>
+	stats quick_sort(std::vector<T>& arr, int low, int high) {
 		stats stat;
 		if (low < high) {
 			int pi = partition(arr, low, high, stat);
-			stats left_stats = quickSort(arr, low, pi - 1);
-			stats right_stats = quickSort(arr, pi + 1, high);
+			stats left_stats = quick_sort(arr, low, pi - 1);
+			stats right_stats = quick_sort(arr, pi + 1, high);
 			stat.comparison_count+= left_stats.comparison_count + right_stats.comparison_count;
 			stat.copy_count += left_stats.copy_count + right_stats.copy_count;
 		}
