@@ -40,3 +40,15 @@ TEST(Sorting, Quick3) {
 	cout << a;
 	cout << b;
 }
+TEST(Sorting, Pyramid1) {
+	std::vector<int> a{ 31, 2, 30, 18, 34, 17, 30, 9, 30, 11, 4, 14, 29, 5, 21, 15, 17, 35, 37, 26, 38, 30, 40, 17, 29, 21, 7, 19, 38, 16 };
+	stats b = pyramid_sort(a);
+	cout << a;
+	cout << b;
+}
+TEST(Sorting, Pyramid2) {
+	std::vector<double> a{ 31.1, 2, 30, 18, 34, 17, 30, 9, 30, 11.1, 4, 14, 29, 5, 21.4, 15, 17, 35, 37, 26.1, 38, 30, 40, 17, 29.2, 21, 7, 19, 38, 16 };
+	stats b = pyramid_sort(a);
+	cout << a;
+	cout << b;
+}

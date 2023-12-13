@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <vector>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ namespace algorithm {
 		stats.copy_count += 3;
 	}
 	template <typename T>	
-	stats bubble_sort(std::vector<T> & arr) {
+	stats bubble_sort(vector<T> & arr) {
 		stats sorting_results;
 		int n = arr.size();
 		for (int i = 0; i < n - 1; i++) {
@@ -39,7 +40,7 @@ namespace algorithm {
 		return sorting_results;
 	}
 	template<typename T>
-	int partition(std::vector<T>& arr, int low, int high, stats& stats) {
+	int partition(vector<T>& arr, int low, int high, stats& stats) {
 		T pivot = arr[high];
 		int i = (low - 1);
 		for (int j = low; j <= high - 1; j++) {
@@ -53,7 +54,7 @@ namespace algorithm {
 		return (i + 1);
 	}
 	template<typename T>
-	stats quick_sort(std::vector<T>& arr, int low, int high) {
+	stats quick_sort(vector<T>& arr, int low, int high) {
 		stats stat;
 		if (low < high) {
 			int pi = partition(arr, low, high, stat);
@@ -65,7 +66,37 @@ namespace algorithm {
 		return stat;
 	}
 	template<typename T>
-	std::ostream& operator << (std::ostream& os, const std::vector<T> vec) {
+	void pyramid(vector<T>& arr, int n, int i, stats& stats) {
+		int largest = i;
+		int left = 2 * i + 1;
+		int right = 2 * i + 2;
+		if (left < n && ++stats.comparison_count && arr[left] > arr[largest])
+			largest = left;
+		if (right < n && ++stats.comparison_count && arr[right] > arr[largest])
+			largest = right;
+		if (largest != i) {
+			swap(arr[i], arr[largest], stats);
+			++stats.copy_count;
+			pyramid(arr, n, largest, stats);
+		}
+	}
+	template<typename T>
+	stats pyramid_sort(vector<T>& arr) {
+		stats stat;
+		stat.comparison_count = 0;
+		stat.copy_count = 0;
+		int n = arr.size();
+		for (int i = n / 2 - 1; i >= 0; --i)
+			pyramid(arr, n, i, stat);
+		for (int i = n - 1; i >= 0; --i) {
+			swap(arr[0], arr[i], stat);
+			++stat.copy_count;
+			pyramid(arr, i, 0, stat);
+		}
+		return stat;
+	}
+	template<typename T>
+	ostream& operator << (ostream& os, const vector<T> vec) {
 		os << "{ ";
 		for (int i = 0; i < vec.size(); i++) {
 			if (i < vec.size() - 1)
@@ -76,7 +107,7 @@ namespace algorithm {
 		}
 		return os;
 	}
-	std::ostream& operator <<(std::ostream& os, const stats description) {
+	ostream& operator <<(ostream& os, const stats description) {
 		os << "Compasion count: " << description.comparison_count << "; " << "Copy count: " << description.copy_count << endl;
 		return os;
 	}
