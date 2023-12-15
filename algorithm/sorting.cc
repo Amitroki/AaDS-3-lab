@@ -1,10 +1,21 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
 namespace algorithm {
+	vector<int> random_seed(int a, int b, int n, int seed) {
+		vector<int> res;
+		mt19937 generator(seed);
+		uniform_int_distribution<> distribution(a, b);
+		for (int i = 0; i < n; i++) {
+			int x = distribution(generator);
+			res.push_back(x);
+		}
+		return res;
+	}
 	struct stats {
 		size_t comparison_count = 0;
 		size_t copy_count = 0;
@@ -18,6 +29,20 @@ namespace algorithm {
 			copy_count = other.copy_count;
 		}
 	};
+	vector<int> ordered_vector(int n) {
+		vector<int> vector;
+		for (int i = 1; i <= n; i++) {
+			vector.push_back(i);
+		}
+		return vector;
+	}
+	vector<int> reversed_ordered_vector(int n) {
+		vector<int> vector;
+		for (int i = n; i > 0; i--) {
+			vector.push_back(i);
+		}
+		return vector;
+	}
 	template<typename T>
 	void swap(T& a, T& b, stats& stats) {
 		T temp = a;
@@ -106,6 +131,12 @@ namespace algorithm {
 			}
 		}
 		return os;
+	}
+	bool operator<(const string& lhs, const string& rhs) {
+		return lhs.compare(rhs) < 0;
+	}
+	bool operator>(const string& lhs, const string& rhs) {
+		return lhs.compare(rhs) > 0;
 	}
 	ostream& operator <<(ostream& os, const stats description) {
 		os << "Compasion count: " << description.comparison_count << "; " << "Copy count: " << description.copy_count << endl;
