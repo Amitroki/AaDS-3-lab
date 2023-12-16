@@ -28,6 +28,16 @@ namespace algorithm {
 			comparison_count = other.comparison_count;
 			copy_count = other.copy_count;
 		}
+		stats& operator+=(const stats& other) {
+			comparison_count += other.comparison_count;
+			copy_count += other.copy_count;
+			return *this;
+		}
+		stats& operator/(const int other) {
+			comparison_count /= other;
+			copy_count /= other;
+			return *this;
+		}
 	};
 	vector<int> ordered_vector(int n) {
 		vector<int> vector;
@@ -119,6 +129,48 @@ namespace algorithm {
 			pyramid(arr, i, 0, stat);
 		}
 		return stat;
+	}
+	stats create_random_vector(int length_vector, int trial_count, int sort) {
+		stats stat;
+		for (int i = 0; i < trial_count; i++) {
+			std::vector<int> test = random_seed(-1000, 1000, length_vector, i);
+			cout << "iteration: " << i << endl;
+			switch (sort) {
+			case 1:
+				stat += bubble_sort(test);
+				break;
+			case 2:
+				stat += quick_sort(test, 0, test.size() - 1);
+				break;
+			case 3:
+				stat += pyramid_sort(test);
+				break;
+			}
+		}
+		stat = stat / trial_count;
+		return stat;
+	}
+	vector<stats> create_hundred_random_vectors(int sort_choice) {
+		vector<stats> stat;
+		for (int i = 1; i < 11; i++) {
+			stat.push_back(create_random_vector(i * 1000, 100, sort_choice));
+			cout << "len: " << i * 1000 << endl;
+		}
+		cout << "len: " << 25000 << endl;
+		stat.push_back(create_random_vector(25000, 100, sort_choice));
+		cout << "len: " << 50000 << endl;
+		stat.push_back(create_random_vector(50000, 100, sort_choice));
+		cout << "len: " << 100000 << endl;
+		stat.push_back(create_random_vector(100000, 100, sort_choice));
+		return stat;
+	}
+	void write_to_file(vector<stats> stat) {
+		ofstream out;
+		out.open("C:/Users/Alex/Desktop/AaDS/lab_3/random_bubble.txt");
+		for (int i = 0; i < stat.size(); i++) {
+			out << stat[i].comparison_count << " " << stat[i].copy_count << endl;
+		}
+		out.close();
 	}
 	template<typename T>
 	ostream& operator << (ostream& os, const vector<T> vec) {

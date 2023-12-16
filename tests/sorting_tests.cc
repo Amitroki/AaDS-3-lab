@@ -74,3 +74,6 @@ TEST(Vector, ReversedOrdered) {
 	vector<int> a = reversed_ordered_vector(100);
 	cout << a;
 }
+TEST(Sorting, RandomBubble) {
+
+}
