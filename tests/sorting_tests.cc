@@ -36,7 +36,7 @@ TEST(Sorting, Quick2) {
 }
 TEST(Sorting, Quick3) {
 	vector<double> a{31.1, 2, 30, 18, 34, 17, 30, 9, 30, 11.1, 4, 14, 29, 5, 21.4, 15, 17, 35, 37, 26.1, 38, 30, 40, 17, 29.2, 21, 7, 19, 38, 16};
-	stats b = quick_sort(a);
+	stats b = quick_sort(a, 0, a.size() - 1);
 	cout << a;
 	cout << b;
 }
@@ -73,4 +73,21 @@ TEST(Vector, Ordered) {
 TEST(Vector, ReversedOrdered) {
 	vector<int> a = reversed_ordered_vector(100);
 	cout << a;
+}
+TEST(Sorting, MyClass1) {
+	Dorm a(100.1, 3.4);
+	Dorm b(200.5, 7.8);
+	vector<Dorm> c;
+	c.push_back(a);
+	c.push_back(b);
+	cout << c;
+}
+TEST(Sorting, MyClass2) {
+	Dorm a(100.1, 20);
+	Dorm b(100.5, 7.8);
+	vector<Dorm> c;
+	c.push_back(a);
+	c.push_back(b);
+	stats d = pyramid_sort(c);
+	cout << c;
 }

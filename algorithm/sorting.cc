@@ -6,6 +6,22 @@
 using namespace std;
 
 namespace algorithm {
+	class Dorm {
+	private:
+		float _cockroaches;
+		float _functioning_bathrooms;
+	public:
+		Dorm(float cockroaches, float functioning_bathrooms): _cockroaches(cockroaches), _functioning_bathrooms(functioning_bathrooms) {}
+		float get_cockroaches() const {
+			return _cockroaches;
+		}
+		float get_bathrooms() const{
+			return _functioning_bathrooms;
+		}
+		float get_result() const {
+			return (_functioning_bathrooms / _cockroaches) * 10;
+		}
+	};
 	vector<int> random_seed(int a, int b, int n, int seed) {
 		vector<int> res;
 		mt19937 generator(seed);
@@ -76,9 +92,9 @@ namespace algorithm {
 		return sorting_results;
 	}
 	template<typename T>
-	stats quick_sort(std::vector<T>& arr) {
-		vector<std::pair<int, int>> stack;
-		stack.push_back(std::make_pair(0, arr.size() - 1));
+	stats quick_sort(vector<T>& arr) {
+		vector<pair<T, T>> stack;
+		stack.push_back(make_pair(0, arr.size() - 1));
 		stats stats;
 		stats.comparison_count = 0;
 		stats.copy_count = 0;
@@ -119,6 +135,32 @@ namespace algorithm {
 			}
 		}
 		return stats;
+	}
+	template<typename T>
+	int partition(vector<T>& arr, int low, int high, stats& stats) {
+		T pivot = arr[high];
+		int i = low - 1;
+		for (int j = low; j <= high - 1; j++) {
+			if (arr[j] <= pivot) {
+				i++;
+				swap(arr[i], arr[j], stats);
+			}
+			stats.comparison_count++;
+		}
+		swap(arr[i + 1], arr[high], stats);
+		return (i + 1);
+	}
+	template<typename T>
+	stats quick_sort(vector<T>& arr, int low, int high) {
+		stats stat;
+		if (low < high) {
+			int pi = partition(arr, low, high, stat);
+			stats left_stats = quick_sort(arr, low, pi - 1);
+			stats right_stats = quick_sort(arr, pi + 1, high);
+			stat.comparison_count += left_stats.comparison_count + right_stats.comparison_count;
+			stat.copy_count += left_stats.copy_count + right_stats.copy_count;
+		}
+		return stat;
 	}
 	template<typename T>
 	void pyramid(vector<T>& arr, int n, int i, stats& stats) {
@@ -310,7 +352,7 @@ namespace algorithm {
 		out.close();
 	}
 	template<typename T>
-	ostream& operator << (ostream& os, const vector<T> vec) {
+	ostream& operator << (ostream& os, const vector<T>& vec) {
 		os << "{ ";
 		for (int i = 0; i < vec.size(); i++) {
 			if (i < vec.size() - 1)
@@ -327,8 +369,18 @@ namespace algorithm {
 	bool operator>(const string& lhs, const string& rhs) {
 		return lhs.compare(rhs) > 0;
 	}
+	bool operator>(const Dorm a, const Dorm b) {
+		return a.get_result() > b.get_result();
+	}
+	bool operator<(const Dorm a, const Dorm b) {
+		return a.get_result() < b.get_result();
+	}
 	ostream& operator <<(ostream& os, const stats description) {
 		os << "Compasion count: " << description.comparison_count << "; " << "Copy count: " << description.copy_count << endl;
+		return os;
+	}
+	ostream& operator << (ostream& os, const Dorm vec) {
+		os << "Bathrooms: " << vec.get_bathrooms() << "| Cockroaches: " << vec.get_cockroaches() << "| Result: " << vec.get_result();
 		return os;
 	}
 }
